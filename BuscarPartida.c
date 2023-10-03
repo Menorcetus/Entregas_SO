@@ -1,4 +1,4 @@
-//programa en C para consultar en que partida se encuentra el jugador buscado
+//Programa en C para consultar en que partida se encuentra el jugador buscado
 #include <mysql.h>
 #include <string.h>
 #include <stdlib.h>
