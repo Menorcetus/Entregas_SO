@@ -5,6 +5,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <stdio.h>
+#include <ctype.h>
 
 int main(int argc, char *argv[])
 {
@@ -32,36 +33,96 @@ int main(int argc, char *argv[])
 
     int i;
 
-    for (i = 0; i<5; i++){
-        printf("Escuchando\n");
+	for (;;){
+		printf("Escuchando\n");
+		
+		sock_conn = accept(sock_listen, NULL, NULL);
+		printf ("He recibido conexion \n");
+		
+		int  terminar = 0;
+		while (terminar == 0){
+			
+			ret =read(sock_conn, petition, sizeof(petition));
+			printf("Recibido\n");
+			
+			petition[ret] = '\0';
+			
+			printf("Peticion: %s\n", petition);
+			
+			char *p = strtok(petition, "/");
+			int codigo = atoi (p);
+			p = strtok(NULL, "/");
+			char nombre [20];
+			
+			if(codigo != 0){
+				strcpy(nombre, p);
+				printf("Codigo: %d, Nombre: %s\n", codigo, nombre);
+			}
 
-        sock_conn = accept(sock_listen, NULL, NULL);
-        printf ("He recibido conexion \n");
+			if (codigo == 0)
+				terminar = 1;
+			// Longitud de nombre
+			else if (codigo == 1)
+				sprintf(respuesta,"%d",strlen(nombre));
+			// Nombre Bonico
+			else if (codigo == 2)
+				if ((nombre[0]=='M')||(nombre[0]=='S'))
+					strcpy(respuesta,"SI");
+				else
+					strcpy(respuesta, "NO");
+			// Alto?			
+			else if(codigo == 3)
+			{
+				p = strtok(NULL, "/");
+				float altura = atof (p);
+				if (altura > 1.70)
+					sprintf(respuesta, "%s: eres alto", nombre);
+				else
+					sprintf(respuesta, "%s: eres bajo", nombre);
+			}			
+			// Nombre palnidromo
+			else if (codigo == 4)
+			{
+				int n = 0;
+    			int f = strlen(nombre)-1;
+    			int Negativo = 0;
 
-        ret =read(sock_conn, petition, sizeof(petition));
-        printf("Recibido\n");
-        
-        petition[ret] = '\0';
+    			while (n != strlen(nombre))
+    			{
+    			    if(nombre[n] == nombre[f])
+    			    {
+    			        printf("%c %c \n",nombre[n], nombre[f]);
+    			        n++;
+    			        f--;
+    			    }
+    			    else if (nombre[n] != nombre[f])
+    			    {
+    			        printf("%c %c \n",nombre[n], nombre[f]);
+    			        Negativo = 1;
+    			        n = strlen(nombre);
+    			    }
+    			}
+    			if(Negativo == 0)
+    			    sprintf(respuesta,"%s SI es palindromo", nombre);   
+    			else if (Negativo == 1)
+    			    sprintf(respuesta,"%s NO es palindromo", nombre); 
+			}
 
-        printf("Peticion: %s\n", petition);
-
-        char *p = strtok(petition, "/");
-        int codigo = atoi (p);
-        p = strtok(NULL, "/");
-        char nombre [20];
-        strcpy(nombre, p);
-        printf("Codigo: %d, Nombre: %s\n", codigo, nombre);
-
-        if (codigo == 1)
-            sprintf(respuesta,"%d",strlen(nombre));
-        else
-            if ((nombre[0]=='M')||(nombre[0]=='S'))
-                strcpy(respuesta,"SI");
-            else
-                strcpy(respuesta, "NO");
-            
-            printf("Respuesta: %s\n", respuesta);
-            write(sock_conn, respuesta, strlen(respuesta));
-            close(sock_conn);
+			// NOMBRE
+			else if (codigo == 5)
+			{
+				for (int i = 0; nombre[i] != '\0'; ++i)
+				{
+					nombre[i] = toupper(nombre[i]);
+				}
+				sprintf(respuesta,"%s ahora esta en mayusculas", nombre);
+			}
+			
+			if (codigo != 0){
+				printf("Respuesta: %s\n", respuesta);
+				write(sock_conn, respuesta, strlen(respuesta));
+			}
+		}
+		close(sock_conn);
     }
 }
