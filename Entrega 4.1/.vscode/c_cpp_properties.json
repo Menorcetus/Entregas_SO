@@ -1,0 +1,49 @@
+{
+    "configurations": [
+        {
+            "name": "windows-gcc-x86",
+            "includePath": [
+                "d:/Proyectos de C/Entregas_SO/Entrega 4.1/**"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "compilerPath": "D:/Mingw/bin/gcc.exe",
+            "cStandard": "c99",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "windows-gcc-x86",
+            "compilerPathInCppPropertiesJson": "D:/Mingw/bin/gcc.exe",
+            "mergeConfigurations": false,
+            "browse": {
+                "path": [
+                    "d:/Proyectos de C/Entregas_SO/Entrega 4.1/**",
+                    "${workspaceFolder}"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
+        },
+        {
+            "name": "Ubuntu",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "compilerPath": "D:\\Mingw\\bin\\gcc.exe",
+            "cStandard": "c99",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "linux-gcc-x64",
+            "browse": {
+                "path": [],
+                "limitSymbolsToIncludedHeaders": false
+            },
+            "mergeConfigurations": false
+        }
+    ],
+    "version": 4
+}
